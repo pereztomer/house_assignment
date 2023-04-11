@@ -20,7 +20,7 @@ def removing_files() -> None:
             os.remove(file)
 
 
-def remove_blob_aux(im_path: str) -> None:
+def remove_blob_aux(im_path: str) -> np.array:
     """
     removing large object from the image using connected components
     :param im_path:
@@ -96,7 +96,7 @@ def extract_points_from_im(path: str) -> (np.array, np.array):
     return x_values, y_values
 
 
-def avg_noise(x: list, y: list) -> (int, int):
+def avg_noise(x: list, y: list) -> (list, list):
     """
     for point who has the same x value aggregate the y value using average
     :param x: list of x coordinate

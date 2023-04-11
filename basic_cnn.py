@@ -1,35 +1,26 @@
 import tensorflow as tf
 
-
-# def basic_cnn(input_shape=(224, 224,3)):
-#     inputs = tf.keras.Input(shape=input_shape)
-#     x = tf.keras.layers.Conv2D(filters=8, kernel_size=3, padding='same', activation='relu')(inputs)
-#     x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
-#     x = tf.keras.layers.Conv2D(filters=16, kernel_size=3, padding='same', activation='relu')(x)
-#     x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
-#     x = tf.keras.layers.Conv2D(filters=24, kernel_size=3, padding='same', activation='relu')(x)
-#     x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
-#     x = tf.keras.layers.Flatten()(x)
-#     x = tf.keras.layers.Dense(units=128, activation='relu')(x)
-#     outputs = tf.keras.layers.Dense(units=3, activation='softmax')(x)
-#     model = tf.keras.Model(inputs=inputs, outputs=outputs)
-#     # model.summary()
-#     return model
-
-def basic_cnn(input_shape):
+def basic_cnn(input_shape: tuple):
+    """
+    creating a basic cnn network, which takes as an input a greyscale image and output a classification
+    :param input_shape: a tuple
+    :return: tf model
+    """
     inputs = tf.keras.Input(shape=input_shape)
     # modify the first Conv2D layer for grayscale images
     x = tf.expand_dims(inputs, axis=-1)
-    x = tf.keras.layers.Conv2D(filters=8, kernel_size=3, padding='same', activation='relu', input_shape=input_shape+(1,))(x)
+    x = tf.keras.layers.Conv2D(filters=3, kernel_size=3, padding='same', activation='relu',
+                               input_shape=input_shape + (1,))(x)
     x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
-    x = tf.keras.layers.Conv2D(filters=16, kernel_size=3, padding='same', activation='relu')(x)
+    x = tf.keras.layers.Conv2D(filters=5, kernel_size=3, padding='same', activation='relu')(x)
     x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
-    x = tf.keras.layers.Conv2D(filters=20, kernel_size=3, padding='same', activation='relu')(x)
+    x = tf.keras.layers.Conv2D(filters=10, kernel_size=3, padding='same', activation='relu')(x)
     x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
     x = tf.keras.layers.Flatten()(x)
     x = tf.keras.layers.Dense(units=96, activation='relu')(x)
     outputs = tf.keras.layers.Dense(units=3, activation='softmax')(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
+    # model.summary()
     return model
 
 
@@ -42,7 +33,7 @@ def main():
         image_size=(224, 224),
         shuffle=True,
         seed=123,
-        validation_split=0.2,
+        validation_split=0.7,
         subset="training")
 
     val_ds = tf.keras.utils.image_dataset_from_directory(
@@ -52,7 +43,7 @@ def main():
         image_size=(224, 224),
         shuffle=True,
         seed=123,
-        validation_split=0.2,
+        validation_split=0.3,
         subset="validation")
 
     loss_fn = tf.keras.losses.SparseCategoricalCrossentropy()
